@@ -1,0 +1,109 @@
+basePath: /
+definitions:
+  controllers.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  controllers.MessageResponse:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+      sequence_number:
+        type: integer
+      timestamp:
+        type: string
+    type: object
+  models.Message:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+      sequence_number:
+        type: integer
+      timestamp:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+  description: This is a web messaging service API.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Web Messaging Service API
+  version: "1.0"
+paths:
+  /api/message:
+    post:
+      consumes:
+      - application/json
+      description: Send a new message
+      parameters:
+      - description: Message
+        in: body
+        name: message
+        required: true
+        schema:
+          $ref: '#/definitions/models.Message'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/controllers.MessageResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Send message
+      tags:
+      - message
+  /api/messages:
+    get:
+      consumes:
+      - application/json
+      description: Get messages within a date range
+      parameters:
+      - description: Start date
+        in: query
+        name: start_time
+        required: true
+        type: string
+      - description: End date
+        in: query
+        name: end_time
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/controllers.MessageResponse'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/controllers.ErrorResponse'
+      summary: Get messages
+      tags:
+      - message
+swagger: "2.0"

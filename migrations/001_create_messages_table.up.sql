@@ -1,0 +1,8 @@
+CREATE ROLE postgres WITH SUPERUSER LOGIN PASSWORD 'mypassword';
+
+CREATE TABLE IF NOT EXISTS messages (
+    id SERIAL PRIMARY KEY,
+    sequence_number INT NOT NULL,
+    content VARCHAR(128) NOT NULL,
+    timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

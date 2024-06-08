@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client 2 Real-Time Messages</title>
+</head>
+<body>
+    <h1>Real-Time Messages</h1>
+    <ul id="messages" style="list-style-type: '- ';"></ul>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:8080/ws');
+
+        socket.onopen = function(event) {
+            console.log('WebSocket connection established.');
+        };
+
+        socket.onerror = function(error) {
+            console.error('WebSocket error:', error);
+        };
+
+        socket.onmessage = function(event) {
+            console.log('onmessage:');
+            const message = JSON.parse(event.data);
+            console.log('Message received:', message);
+
+            const messageList = document.getElementById('messages');
+            const listItem = document.createElement('li');
+            listItem.textContent = `Seq: ${message.sequence_number}, Content: ${message.content}, Time: ${message.timestamp}`;
+            messageList.appendChild(listItem);
+        };
+    </script>
+</body>
+</html>

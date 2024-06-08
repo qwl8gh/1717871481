@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client 3 Message History</title>
+</head>
+<body>
+    <h1>Message History (Last 10 Minutes)</h1>
+    <ul id="history"></ul>
+    <script>
+        function fetchMessages() {
+            const now = new Date();
+            const tenMinutesAgo = new Date(now.getTime() - 10 * 60000).toISOString();
+            const nowIso = now.toISOString();
+
+            fetch(`http://localhost:8080/api/messages?start_time=${tenMinutesAgo}&end_time=${nowIso}`)
+            .then(response => response.json())
+            .then(messages => {
+                const historyList = document.getElementById('history');
+                historyList.innerHTML = '';
+                messages.forEach(message => {
+                    const listItem = document.createElement('li');
+                    listItem.textContent = `Seq: ${message.sequence_number}, Content: ${message.content}, Time: ${message.timestamp}`;
+                    historyList.appendChild(listItem);
+                });
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Failed to fetch message history.');
+            });
+        }
+
+        fetchMessages();
+        setInterval(fetchMessages, 60000);
+    </script>
+</body>
+</html>

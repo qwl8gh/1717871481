@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Client 1 Send Message</title>
+</head>
+<body>
+    <h1>Send Message</h1>
+    <form id="messageForm">
+        <label for="sequenceNumber">Sequence Number:</label>
+        <input type="number" id="sequenceNumber" name="sequenceNumber" required><br><br>
+        <label for="content">Message Content:</label>
+        <input type="text" id="content" name="content" required><br><br>
+        <button type="submit">Send</button>
+    </form>
+    <script>
+        document.getElementById('messageForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const sequenceNumber = parseInt(document.getElementById('sequenceNumber').value, 10);
+            const content = document.getElementById('content').value;
+
+            fetch('http://localhost:8080/api/message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ sequence_number: sequenceNumber, content: content })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                //alert('Message sent successfully!');
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Failed to send message.');
+            });
+        });
+    </script>
+</body>
+</html>
